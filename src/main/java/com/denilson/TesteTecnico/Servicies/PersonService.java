@@ -22,10 +22,8 @@ public class PersonService {
     }
 
     public Person getPersonByid(Long id){
-        Person person = personRepository.findById(id)
+        return personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Person not found with id: " + id));
-
-        return person;
     }
 
     public Person updatePerson(Long id, Person personDetails) {
