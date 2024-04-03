@@ -21,5 +21,15 @@ public class Address {
     @JoinColumn(name = "person_id")
     private Person person;
 
-    // Getters and setters
+    public Address(){
+
+    }
+    public Address(String street, String zipCode, String number, String city, String state, Person person) {
+        this.street = street;
+        this.zipCode = zipCode;
+        this.number = number;
+        this.city = city;
+        this.state = state;
+        this.person = person;
+    }
 }
