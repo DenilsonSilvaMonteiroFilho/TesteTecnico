@@ -27,7 +27,7 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    public Person getPersonById(@PathVariable Long id) {
+    public Person getPersonById(@PathVariable Long id) throws Throwable {
         return personService.getPersonByid(id);
     }
 
@@ -37,11 +37,11 @@ public class PersonController {
     }
 
     @PutMapping("/{id}")
-    public Person updatePerson(@PathVariable Long id, @RequestBody Person personDetails) {
+    public Person updatePerson(@PathVariable Long id, @RequestBody Person personDetails) throws Throwable {
         return personService.updatePerson(id,personDetails);
     }
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) throws Throwable {
         personService.deletePerson(id);
     }
 }

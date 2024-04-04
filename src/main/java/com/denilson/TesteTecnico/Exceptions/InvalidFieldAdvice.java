@@ -8,12 +8,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class ResourceNotFoundAdvice {
-
+public class InvalidFieldAdvice {
     @ResponseBody
-    @ExceptionHandler(ResourceNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    ResponseEntity<String> resourceNotFoundHandler( ResourceNotFoundException e){
-       return ResponseEntity.badRequest().body(e.getMessage());
+    @ExceptionHandler(InvalidFieldException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ResponseEntity<String> invalidFieldAdviceHandler( InvalidFieldException e){
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }
