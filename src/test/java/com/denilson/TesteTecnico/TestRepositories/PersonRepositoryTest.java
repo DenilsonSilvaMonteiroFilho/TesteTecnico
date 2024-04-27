@@ -1,4 +1,4 @@
-package com.denilson.TesteTecnico;
+package com.denilson.TesteTecnico.TestRepositories;
 
 import com.denilson.TesteTecnico.Entities.Person;
 import com.denilson.TesteTecnico.Repositories.PersonRepository;
@@ -56,13 +56,15 @@ public class PersonRepositoryTest {
         person.setDateOfBirth(LocalDate.of(1999,8,21));
 
         personRepository.delete(person);
+        Throwable e = Assertions.catchThrowable(() -> personRepository.findById(0l).get());
+        assertThat(e).isInstanceOf(NoSuchElementException.class).hasMessageContaining("No value present");
+
     }
 
     @Test
     @DisplayName("Busca pessoa por ID que não existe.")
     void findByIdNotExist() {
         Throwable e = Assertions.catchThrowable(() -> personRepository.findById(0l).get());
-
         assertThat(e).isInstanceOf(NoSuchElementException.class).hasMessageContaining("No value present");
     }
 
