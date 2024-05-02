@@ -63,8 +63,9 @@ public class AddressService {
         
         List<Address> addressList = getAddressesByPersonId(personId);
         for (Address address1: addressList){
-            if (address1.getMainAddress()){
+            if (address1.getMainAddress() != null && address1.getMainAddress()){
                 address1.setMainAddress(false);
+                addressRepository.save(address1);
             }
         }
 
