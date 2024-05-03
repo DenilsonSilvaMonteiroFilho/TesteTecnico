@@ -25,7 +25,7 @@ public class AddressService {
     }
 
     public Address createAddressForPerson(Long personId,Address address) throws Throwable {
-        Person person = (Person) personRepository.findById(personId)
+        Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new ResourceNotFoundException("Person not found with id: " + personId));
 
         if(!address.equals(null)) {

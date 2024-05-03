@@ -33,14 +33,14 @@ public class PersonService {
         return personRepository.save(person);
     }
 
-    public Person getPersonByid(Long id) throws Throwable {
+    public Person getPersonByid(Long id) {
         return personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Person not found with id: " + id));
     }
 
-    public Person updatePerson(Long id, Person personDetails) throws Throwable {
+    public Person updatePerson(Long id, Person personDetails) {
         Person person =  personRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Person not found with id: " + id));
+                .orElseThrow (() -> new ResourceNotFoundException("Person not found with id: " + id));
         if(personDetails == null){
             throw new ResourceNotFoundException("Invalid data");
         }
@@ -58,7 +58,7 @@ public class PersonService {
         return personRepository.save(person);
     }
 
-    public void deletePerson(Long id) throws Throwable {
+    public void deletePerson(Long id){
         Person person = (Person) personRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Person not found with id: " + id));
         personRepository.delete(person);

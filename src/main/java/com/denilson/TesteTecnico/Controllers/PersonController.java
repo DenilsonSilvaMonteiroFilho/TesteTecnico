@@ -1,8 +1,11 @@
 package com.denilson.TesteTecnico.Controllers;
 
 import com.denilson.TesteTecnico.Entities.Person;
+import com.denilson.TesteTecnico.Exceptions.ResourceNotFoundException;
 import com.denilson.TesteTecnico.Servicies.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,26 +25,47 @@ public class PersonController {
     private PersonService personService;
 
     @GetMapping
-    public List<Person> getAllPeople() {
-        return personService.getAllPeople();
+    public ResponseEntity<List<Person>> getAllPeople() {
+        List<Person> people = personService.getAllPeople();
+        return ResponseEntity.ok(people);
     }
 
     @GetMapping("/{id}")
-    public Person getPersonById(@PathVariable Long id) throws Throwable {
-        return personService.getPersonByid(id);
+    public ResponseEntity<Person> getPersonById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(personService.getPersonByid(id));
+        } catch (Throwable e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
-    public Person createPerson(@RequestBody Person person) {
-        return personService.createPerson(person);
+    public ResponseEntity<Person> createPerson(@RequestBody Person person) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(personService.createPerson(person));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PutMapping("/{id}")
-    public Person updatePerson(@PathVariable Long id, @RequestBody Person personDetails) throws Throwable {
-        return personService.updatePerson(id,personDetails);
+    public ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody Person personDetails) {
+        try {
+            Person updatedPerson = personService.updatePerson(id, personDetails);
+            return ResponseEntity.ok(updatedPerson);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
+
+
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) throws Throwable {
-        personService.deletePerson(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        try {
+            personService.deletePerson(id);
+            return ResponseEntity.noContent().build();
+        } catch (Throwable e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
