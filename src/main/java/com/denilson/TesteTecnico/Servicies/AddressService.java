@@ -24,7 +24,7 @@ public class AddressService {
         return addressRepository.findByPersonId(personId);
     }
 
-    public Address createAddressForPerson(Long personId,Address address) throws Throwable {
+    public Address createAddressForPerson(Long personId,Address address){
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new ResourceNotFoundException("Person not found with id: " + personId));
 
@@ -49,35 +49,37 @@ public class AddressService {
             address.setNumber(addressDetails.getNumber());
             address.setCity(addressDetails.getCity());
             address.setState(addressDetails.getState());
+        }else {
+            throw new InvalidAddressExcetion("Address null or invalid");
         }
         personRepository.saveAndFlush(person);
         return addressRepository.save(address);
     }
-    
+
     public Address setMainAddress(Long personId, Long addressId) throws Throwable {
-        Person person = (Person) personRepository.findById(personId)
+        Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new ResourceNotFoundException("Person not found with id: " + personId));
 
         Address address = addressRepository.findById(addressId)
                 .orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + addressId));
-        
+
         List<Address> addressList = getAddressesByPersonId(personId);
-        for (Address address1: addressList){
-            if (address1.getMainAddress() != null && address1.getMainAddress()){
+        for (Address address1 : addressList) {
+            if (address1.getId().equals(addressId)) {
+                address1.setMainAddress(true);
+            } else {
                 address1.setMainAddress(false);
-                addressRepository.save(address1);
             }
         }
-
-        address.setMainAddress(true);
         return addressRepository.save(address);
     }
+
 
     public Object deleteAddressForPerson(Long personId, Long addressId) {
         return addressRepository.findByIdAndPersonId(addressId, personId).map(address -> {
             addressRepository.delete((Address) address);
             return address;
         }).orElseThrow(() -> new ResourceNotFoundException(
-                "Address not found with id " + addressId + " and personId " + personId));
+                "Address not found with id " + addressId + " or personId " + personId));
     }
 }

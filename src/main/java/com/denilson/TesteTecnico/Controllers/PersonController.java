@@ -51,8 +51,7 @@ public class PersonController {
     @PutMapping("/{id}")
     public ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody Person personDetails) {
         try {
-            Person updatedPerson = personService.updatePerson(id, personDetails);
-            return ResponseEntity.ok(updatedPerson);
+            return ResponseEntity.ok(personService.updatePerson(id, personDetails));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
